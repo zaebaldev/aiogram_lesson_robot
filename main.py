@@ -1,7 +1,7 @@
 from aiogram import Bot, Dispatcher, F
 from aiogram import types
 from aiogram.filters import CommandStart, Command
-from config import token
+from config import token, admin_ids
 import asyncio
 from aiogram.types import FSInputFile
 
@@ -9,6 +9,13 @@ my_bot = Bot(token=str(token))
 dp = Dispatcher()
 
 any_media = F.photo | F.document | F.video
+
+
+@dp.message(F.from_user.id.in_(admin_ids) & (F.text == "admin"))
+async def handle_exact_users_message(message: types.Message):
+    await message.answer(
+        text="secret message",
+    )
 
 
 @dp.message(F.photo & ~F.caption)
