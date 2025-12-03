@@ -11,11 +11,20 @@ dp = Dispatcher()
 any_media = F.photo | F.document | F.video
 
 
+@dp.message(F.photo & ~F.caption)
+async def handle_any_photo_without_caption(message: types.Message):
+    if message.photo:
+        await message.answer(
+            text="I cant see what in image",
+        )
+
+
 @dp.message(any_media)
 async def handle_any_media_message(message: types.Message):
     if message.photo:
         await message.answer_photo(
             photo=message.photo[1].file_id,
+            caption=message.caption if message.caption else "",
         )
     if message.document:
         await message.answer_document(
@@ -51,6 +60,16 @@ async def photo_cmd(message: types.Message):
     photo = FSInputFile("/home/alien/Pictures/icon - edid this.png")
     await message.answer_photo(
         photo=photo,
+        caption="this is a picture",
+    )
+
+
+@dp.message(Command("doc"))
+async def doc_cmd(message: types.Message):
+    doc = FSInputFile("/home/alien/Pictures/icon - edid this.png")
+    await message.answer_document(
+        document=doc,
+        caption="this is a picture",
     )
 
 
