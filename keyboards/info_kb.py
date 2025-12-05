@@ -25,3 +25,19 @@ def create_info_kb_builder():
         )
     builder.adjust(3)
     return builder.as_markup()
+
+
+def request_user_phone_number_and_location():
+    btn1 = KeyboardButton(
+        text="send my phone number",
+        request_contact=True,
+    )
+    btn2 = KeyboardButton(
+        text="send my location",
+        request_location=True,
+    )
+    keyboard = ReplyKeyboardMarkup(
+        keyboard=[[btn1, btn2]],
+        resize_keyboard=True,
+    )
+    return keyboard
