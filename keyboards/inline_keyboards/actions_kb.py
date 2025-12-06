@@ -1,5 +1,6 @@
 from aiogram.types.inline_keyboard_markup import InlineKeyboardMarkup
 from aiogram.types.inline_keyboard_button import InlineKeyboardButton
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
 def build_actions_kb():
@@ -19,3 +20,14 @@ def build_actions_kb():
         inline_keyboard=[[btn1], [btn2, btn3]],
     )
     return kb
+
+
+def build_nums_inline_kb():
+    builder = InlineKeyboardBuilder()
+    for i in range(1, 11):
+        builder.button(
+            text=f"{i}",
+            callback_data=f"inline_kb:{i}", #inline_kb:2
+        )
+    builder.adjust(2)
+    return builder.as_markup()
