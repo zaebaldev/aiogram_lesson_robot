@@ -7,16 +7,18 @@ from keyboards import (
     create_info_kb_markup,
     request_user_phone_number_and_location,
 )
+from db import cursor, conn
 
 router = Router()
 
 
 @router.message(CommandStart())
 async def handle_start(message: types.Message):
-    print(message.from_user.id)
-
+    user_name = message.from_user.full_name
+    cursor.execute("INSERT INTO users (username) VALUES (?)", user_name)
+    conn.commit()
     await message.answer(
-        text=f"Добро  пожаловать, {message.from_user.full_name}",
+        text=f"Добро  пожаловать, {user_name}",
         reply_markup=request_user_phone_number_and_location(),
     )
 
