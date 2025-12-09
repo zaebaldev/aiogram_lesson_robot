@@ -47,5 +47,7 @@ async def handle_survey_surname_state(
     message: types.Message,
     state: FSMContext,
 ):
-    await state.update_data(surname=message.text)
+    await state.update_data(
+        surname=message.text,
+    )
     await state.set_state(Survey.age)
