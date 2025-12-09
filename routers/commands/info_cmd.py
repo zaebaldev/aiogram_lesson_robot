@@ -15,8 +15,7 @@ router = Router()
 @router.message(CommandStart())
 async def handle_start(message: types.Message):
     first_name = message.from_user.first_name
-    query = "INSERT INTO users (username, email) VALUES (?,?)"
-    cursor.execute(query, (first_name, "test@gmail.com"))
+    cursor.execute("INSERT INTO users (username) VALUES (?)", (first_name,))
     conn.commit()
     await message.answer(
         text=f"Добро  пожаловать, {first_name}",
