@@ -14,11 +14,12 @@ router = Router()
 
 @router.message(CommandStart())
 async def handle_start(message: types.Message):
-    user_name = message.from_user.full_name
-    cursor.execute("INSERT INTO users (username) VALUES (?)", user_name)
+    first_name = message.from_user.first_name
+    query = "INSERT INTO users (username, email) VALUES (?,?)"
+    cursor.execute(query, (first_name, "test@gmail.com"))
     conn.commit()
     await message.answer(
-        text=f"Добро  пожаловать, {user_name}",
+        text=f"Добро  пожаловать, {first_name}",
         reply_markup=request_user_phone_number_and_location(),
     )
 
