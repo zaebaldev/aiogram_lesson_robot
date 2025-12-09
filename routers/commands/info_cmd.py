@@ -36,3 +36,15 @@ async def handle_exact_users_message(message: types.Message):
     await message.answer(
         text="secret message",
     )
+
+
+@router.message(Command("users", prefix="!/"))
+async def hanle_users_cmd(message: types.Message):
+    users = cursor.execute("SELECT username  FROM user")
+    # users = cursor.execute("SELECT username  FROM users WHERE id=6")
+    users = users.fetchall()
+    print(users)
+    for user in users:
+        user_name = user[0]
+        print(user_name)
+        await message.answer(user_name)
