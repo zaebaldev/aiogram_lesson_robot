@@ -1,15 +1,17 @@
-import aiosqlite
 from config import my_db
+import sqlite3
 
 
-async def init_db():
-    db = await aiosqlite.connect(my_db)
-    query = """
+def init_db():
+    conn = sqlite3.connect(my_db)
+    cursor = conn.cursor()
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE
         );
         """
-    cursor = await db.execute(query)
-    await cursor.close()
-    await db.close()
+    )
+    conn.commit()
+    conn.close()

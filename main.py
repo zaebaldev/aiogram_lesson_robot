@@ -10,7 +10,7 @@ dp = Dispatcher()
 
 async def main():
     print("I am starting ...")
-    await init_db()
+    init_db()
     dp.include_routers(router)
     await dp.start_polling(my_bot)
 
