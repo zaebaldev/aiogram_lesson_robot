@@ -1,17 +1,18 @@
 from config import my_db
-import sqlite3
+import aiosqlite
 
 
-def init_db():
-    conn = sqlite3.connect(my_db)
-    cursor = conn.cursor()
-    cursor.execute(
+async def init_db():
+    db = await aiosqlite.connect(my_db)
+    cursor = await db.cursor()
+    await cursor.execute(
         """
-        CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL UNIQUE
-        );
-        """
+            CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL UNIQUE
+            );
+            """
     )
-    conn.commit()
-    conn.close()
+    await db.commit()
+    await cursor.close()
+    await db.close()
