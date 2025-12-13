@@ -1,7 +1,7 @@
 from aiogram import Router
 from aiogram import types
 from aiogram.filters import Command
-from crud import get_all_users, delete_user, update_user
+from crud import get_all_users, delete_user, update_user, check_user
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 
@@ -49,9 +49,13 @@ async def handle_user_update_id(
 ):
     text = message.text
     if text and text.isdigit():
-        await state.update_data(id=text)
-        await message.answer("Enter first name to update")
-        await state.set_state(UserUpdate.fistr_name)
+        user = await check_user(user_id=text)
+        if user:
+            await state.update_data(id=text)
+            await message.answer("Enter first name to update")
+            await state.set_state(UserUpdate.fistr_name)
+        else:
+            await message.answer("User not found")
     else:
         await message.answer("Enter correct ID")
 

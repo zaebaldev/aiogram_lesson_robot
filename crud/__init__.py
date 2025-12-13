@@ -3,4 +3,5 @@ from .users import (
     add_user,
     delete_user,
     update_user,
+    check_user,
 )

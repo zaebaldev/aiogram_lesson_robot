@@ -42,3 +42,15 @@ async def update_user(
     await db.commit()
     await cursor.close()
     await db.close()
+
+
+async def check_user(
+    user_id: int,
+) -> bool:
+    db = await aiosqlite.connect(my_db)
+    cursor = await db.cursor()
+    await cursor.execute("SELECT id  FROM users WHERE id=(?)", (user_id,))
+    row = await cursor.fetchone()
+    await cursor.close()
+    await db.close()
+    return True if row else False
