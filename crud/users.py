@@ -1,9 +1,14 @@
-from typing import Iterable, Tuple
+import logging
+import sqlite3
+from typing import Iterable
 import aiosqlite
 from config import my_db
+import logging
+
+logger = logging.getLogger(__name__)
 
 
-async def get_all_users() -> Iterable[Tuple]:
+async def get_all_users() -> Iterable[sqlite3.Row]:
     db = await aiosqlite.connect(my_db)
     cursor = await db.cursor()
     await cursor.execute("SELECT * FROM users")
@@ -13,13 +18,22 @@ async def get_all_users() -> Iterable[Tuple]:
     return rows
 
 
-async def add_user(first_name: str) -> None:
-    db = await aiosqlite.connect(my_db)
-    cursor = await db.cursor()
-    await cursor.execute("INSERT INTO users (username) VALUES (?)", (first_name,))
-    await db.commit()
-    await cursor.close()
-    await db.close()
+async def add_user(
+    first_name: str,
+    tg_id: str,
+) -> None:
+    try:
+        db = await aiosqlite.connect(my_db)
+        cursor = await db.cursor()
+        await cursor.execute(
+            "INSERT INTO users (username, tg_id) VALUES (?, ?)",
+            (first_name, tg_id),
+        )
+        await db.commit()
+        await cursor.close()
+        await db.close()
+    except Exception as e:
+        logger.error(e)
 
 
 async def delete_user(user_id: int) -> None:
@@ -30,10 +44,7 @@ async def delete_user(user_id: int) -> None:
         await db.commit()
 
 
-async def update_user(
-    user_id: int,
-    first_name: str,
-) -> None:
+async def update_user(user_id: int, first_name: str, z) -> None:
     db = await aiosqlite.connect(my_db)
     cursor = await db.cursor()
     await cursor.execute(
