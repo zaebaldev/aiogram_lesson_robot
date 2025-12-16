@@ -3,13 +3,24 @@ from config import token
 import asyncio
 from routers import router
 from db import init_db
+import logging
+
+logger = logging.getLogger(__name__)
 
 my_bot = Bot(token=str(token))
 dp = Dispatcher()
 
 
 async def main():
-    print("I am starting ...")
+
+    logging.basicConfig(
+        level=logging.INFO,
+    )
+    try:
+        2 / 0
+    except Exception as e:
+        logger.error(e)
+    logger.info("info log")
     await init_db()
     dp.include_routers(router)
     await dp.start_polling(my_bot)
